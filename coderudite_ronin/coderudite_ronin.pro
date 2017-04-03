@@ -273,10 +273,10 @@ DISTFILES += \
     mime_types.txt
 
 
-#QMAKE_POST_LINK += $(COPY_DIR) $$system_path($$PWD/data) $$system_path($$OUT_PWD/data)
+QMAKE_POST_LINK += $(COPY_DIR) $$system_path($$PWD/data) $$system_path($$OUT_PWD/data)
 
 
-DEFINES += "SITEROOT=\"../../..\""
-#DEFINES += "SITEROOT=\"$$PWD\""
+#DEFINES += "SITEROOT=\"../../..\""
+DEFINES += "SITEROOT=\"$$OUT_PWD\""
 
 #ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android

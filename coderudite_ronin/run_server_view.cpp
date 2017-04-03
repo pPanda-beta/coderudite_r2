@@ -6,7 +6,7 @@ run_server_view::run_server_view(QWidget *parent) :
 	ui(new Ui::run_server_view)
 {
 	ui->setupUi(this);
-	m_ldrs=new DedicatedRunServer(MAC2STR(SITEROOT)+tr("/."),{1234,80});
+	m_ldrs=new DedicatedRunServer(MAC2STR(SITEROOT)+tr("/."), {5553,380});
 }
 
 run_server_view::~run_server_view()
