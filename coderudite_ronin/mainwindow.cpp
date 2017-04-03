@@ -13,8 +13,8 @@ MainWindow::MainWindow(QWidget *parent) :
 //	system("cd ../../../../../..");
 //	system("ls");
 //	system("pwd");
-	ui->tabWidget->addTab(new run_server_view,tr("Run Server"));
-
+	on_lnchCDN_clicked();
+	on_lnchRunSrv_clicked();
 }
 
 MainWindow::~MainWindow()
