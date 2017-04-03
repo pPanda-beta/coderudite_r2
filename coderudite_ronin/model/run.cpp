@@ -51,6 +51,8 @@ RunResult Run::execute(string inp, int ms)
 void saveToFile(string filename, Solution &src)
 {
 	QFile file( filename.data() );
+	if(file.exists())
+		file.remove();
 	if ( file.open(QIODevice::ReadWrite) )
 		file.write(src.getSource().data());
 }

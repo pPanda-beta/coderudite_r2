@@ -273,7 +273,7 @@ DISTFILES += \
     mime_types.txt
 
 
-QMAKE_POST_LINK += $(COPY_DIR) $$system_path($$PWD/data) $$system_path($$OUT_PWD/data)
+QMAKE_POST_LINK += $(COPY_DIR) $$system_path($$PWD/data) $$system_path($$OUT_PWD/)
 
 
 #DEFINES += "SITEROOT=\"../../..\""

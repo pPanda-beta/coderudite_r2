@@ -10,29 +10,78 @@
     }
 
     #editor {
-        margin: 0;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-    }
+		border: 1px solid lightgray;
+		margin: auto;
+		height: 200px;
+		width: 80%;    }
   </style>
 </head>
 <body>
 
-<pre id="editor">function foo(items) {
-    var i;
-    for (i = 0; i &lt; items.length; i++) {
-        alert("Ace Rocks " + items[i]);
-    }
-}</pre>
+<H1>Coderudite Browser-based - IDE</H1>
 
-<script src="src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+<pre id="editor">
+
+public class Main {
+    public static void main(String args[]){
+        System.out.println("Hello CSE");
+    }
+}
+</pre>
+
+
+<script src="assets/lib/ace.js/src-min/ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="assets/lib/ace.js/src-min/ext-language_tools.js"></script>
 <script>
     var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/twilight");
-    editor.session.setMode("ace/mode/javascript");
+    editor.setTheme("ace/theme/eclipse");
+    editor.session.setMode("ace/mode/java");
+    editor.setOptions({
+        enableBasicAutocompletion: true,
+        enableSnippets: true,
+        enableLiveAutocompletion: true
+    });
+</script>
+
+<p>
+	Custom input <br/>
+	<textarea id="inpBox"></textarea>
+	
+	<button id="rbtn"> Run </button>
+	<br/>
+
+	Output <br/>
+	<pre id="oup" style="border : 2px solid black; "></pre> <br/>
+
+	Status : <div id="st"></div> <br/>
+	Error : <br/>
+	<pre id="err" style="border : 2px solid black; "></pre>
+	
+</p>
+
+<script>
+
+var outBox = document.getElementById("oup");
+var statusHolder = document.getElementById("st");
+var errBox = document.getElementById("err");
+	
+document.getElementById("rbtn").onclick = function(){	
+	var data='source='+encodeURI(editor.getValue()) 
+			+'&'+'type='+'java'
+			+'&'+'inp' + encodeURI(document.getElementById("inpBox").value) ;
+			
+	var xhr = new XMLHttpRequest();
+	xhr.open('POST', 'http://localhost:5553', true);
+	xhr.onload = function () {
+		console.log(this.responseText);
+		var result = JSON.parse(this.responseText);
+		outBox.textContent = result.output_data;
+		errBox.textContent = result.errors;
+		statusHolder.innerText = result.status;
+	};
+	xhr.send(data);
+};
+
 </script>
 
 </body>
