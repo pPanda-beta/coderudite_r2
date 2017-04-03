@@ -1,7 +1,14 @@
 #include <QString>
 #include <QtTest>
 
+#include <string>
+#include <cstdio>
+#include <regex>
+#include <map>
+
 #include "../coderudite_ronin/model/run.h"
+
+using namespace std;
 
 class RunTestsTest : public QObject
 {
@@ -24,6 +31,7 @@ const char* sample_code_c = R"dhamak(
 int main()
 {
 	printf("Hello World - c\n");
+//	usleep(750 * 1000);
 	return 0;
 }
 )dhamak";
@@ -40,11 +48,13 @@ public class Main
 
 string test_run(string source_code,string type)
 {
-	Solution s(source_code);
-	Run r(s,type);
+	Solution s(source_code, type);
+	Run r(s);
 	RunResult result = r.execute("",1000);
-//	qDebug()<<result.m_oup.str().data();
-	return result.m_oup.str();
+	qDebug()<<"O/P"<<result.m_oup.str().data();
+//	qDebug()<<result.exec_time.count();
+	static QString statusToString[] = { "SUCC", "CTE", "RTE", "TLE", "ERR" };
+	return result.toString();
 }
 
 void RunTestsTest::testCSrc()
@@ -56,6 +66,8 @@ void RunTestsTest::testJavaSrc()
 {
 	QCOMPARE(test_run(sample_code_java,"java").data(), "Hello World - Java 8\n") ;
 }
+
+
 
 QTEST_APPLESS_MAIN(RunTestsTest)
 

@@ -1,17 +1,26 @@
 #include "run.h"
 #include <QDebug>
 
-map<string, function<void(Solution &, QProcess&)>> prepare;
+map<string, function<void(Solution &, QProcess&, RunResult &)>> prepare;
 
-Run::Run(Solution src, string type):m_src(src)
+Run::Run(Solution src):m_src(src)
 {
-	prepare[type](m_src,m_handle);
+	string type = m_src.getType();
+	if(prepare.find(type) != prepare.end())
+		prepare[type](m_src,m_handle, result);
+	else
+	{
+		result.status = RunResult::STATUS::ERR;
+		result.m_err<<"File Type not supported";
+	}
+	result.m_src = m_src;
 }
 
 RunResult Run::execute(string inp, int ms)
 {
-	RunResult result;
-	result.m_src = m_src;
+	if(result.status != RunResult::STATUS::SUCC)
+		return result;
+
 	result.m_inp.str(inp);
 
 	auto start_time = chrono::system_clock::now();
@@ -22,18 +31,22 @@ RunResult Run::execute(string inp, int ms)
 	m_handle.write(inp.data());
 	m_handle.closeWriteChannel();
 
-	m_handle.waitForFinished();
+	m_handle.waitForFinished(ms);
 	auto end_time = chrono::system_clock::now();
 
 	if(m_handle.state() == QProcess::Running)
+	{
 		m_handle.terminate();
+		result.status = RunResult::STATUS::TLE;
+	}
 
-	result.m_oup.str(m_handle.readAll().toStdString());
-
+	result.m_oup.str(m_handle.readAllStandardOutput().toStdString());
 	result.exec_time = end_time - start_time;
 	return result;
 }
 
+
+//Compilers for different types ...
 
 void saveToFile(string filename, Solution &src)
 {
@@ -42,30 +55,36 @@ void saveToFile(string filename, Solution &src)
 		file.write(src.getSource().data());
 }
 
-void prepareGcc(Solution &src, QProcess &run_process)
+void setCompilationError(RunResult &result, QProcess &compile)
+{
+	result.status = RunResult::STATUS::CTE;
+	result.m_err<<compile.readAllStandardError().toStdString()<<"\n"<<compile.readAllStandardOutput().toStdString();
+}
+
+void prepareGcc(Solution &src, QProcess &run_process, RunResult &result)
 {
 	saveToFile("src.c", src);
 
 	QProcess compile;
 	compile.start("gcc", QStringList()<<"src.c"<<"-o"<<"src.out");
-	if(!compile.waitForFinished())
-	{
-		// CT error
-	}
-	run_process.setProgram("./src.out");
+	if(!compile.waitForFinished()  || compile.exitCode() != 0)
+		setCompilationError(result, compile);
+	else
+		run_process.setProgram("./src.out");
 }
 
-void prepareJava(Solution &src, QProcess &run_process)
+void prepareJava(Solution &src, QProcess &run_process, RunResult &result)
 {
 	saveToFile("Main.java",src);
 	QProcess compile;
 	compile.start("javac", QStringList()<<"Main.java");
-	if(!compile.waitForFinished())
+	if(!compile.waitForFinished()  || compile.exitCode() != 0)
+		setCompilationError(result, compile);
+	else
 	{
-		// CT error
+		run_process.setProgram("java");
+		run_process.setArguments(QStringList()<<"Main");
 	}
-	run_process.setProgram("java");
-	run_process.setArguments(QStringList()<<"Main");
 }
 
 int r=[]()

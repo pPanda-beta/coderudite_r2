@@ -9,10 +9,14 @@ using namespace std;
 class RunResult
 {
 public:
-    ostringstream m_inp,m_oup;
+	enum STATUS { SUCC, CTE, RTE, TLE, ERR} status;
+	stringstream m_inp,m_oup,m_err;
     Solution m_src;
 	chrono::duration<double> exec_time;
 	RunResult();
+	RunResult(const RunResult&);
+
+	string toString();
 };
 
 #endif // RUNRESULT_H

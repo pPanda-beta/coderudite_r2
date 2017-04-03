@@ -12,8 +12,9 @@ class Run
 	int run_id;
 	Solution m_src;
 	QProcess m_handle;
+	RunResult result;
 public:
-	Run(Solution src, string type);
+	Run(Solution src);
 	RunResult execute(string input, int ms);
 };
 

@@ -24,7 +24,9 @@ SOURCES += main.cpp\
     cdn.cpp \
     model/solution.cpp \
     model/runresult.cpp \
-    model/run.cpp
+    model/run.cpp \
+    dedicatedrunserver.cpp \
+    run_server_view.cpp
 
 HEADERS  += mainwindow.h \
     qhttpserver/src/qhttpconnection.h \
@@ -39,7 +41,9 @@ HEADERS  += mainwindow.h \
     cdn.h \
     model/solution.h \
     model/runresult.h \
-    model/run.h
+    model/run.h \
+    dedicatedrunserver.h \
+    run_server_view.h
 
 INCLUDEPATH += qhttpserver/src \
 	qhttpserver/http-parser
@@ -51,7 +55,8 @@ DEFINES += "QHTTPSERVER_API=\"\""
 
 
 FORMS    += mainwindow.ui \
-    cdnview.ui
+    cdnview.ui \
+    run_server_view.ui
 
 CONFIG -= c++11 -frtti -fexceptions
 CONFIG += thread warn_off

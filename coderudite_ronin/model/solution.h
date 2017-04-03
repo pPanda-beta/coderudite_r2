@@ -6,9 +6,10 @@ using namespace std;
 
 class Solution
 {
-	string m_src;
+	string m_src,m_type;
 public:
-	Solution(string src="");
+	Solution(string src="", string type="txt");
+	string getType();
 	virtual string getSource();
 };
 

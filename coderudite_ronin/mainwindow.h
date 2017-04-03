@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <vector>
 #include "cdnview.h"
-#include "model/run.h"
+#include "run_server_view.h"
 
 namespace Ui {
 class MainWindow;
@@ -20,6 +20,8 @@ public:
 
 private slots:
 	void on_lnchCDN_clicked();
+
+	void on_lnchRunSrv_clicked();
 
 private:
 	Ui::MainWindow *ui;

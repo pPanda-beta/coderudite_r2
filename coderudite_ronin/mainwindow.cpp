@@ -11,8 +11,9 @@ MainWindow::MainWindow(QWidget *parent) :
 	//new CDN(QDir::currentPath()+tr("/data/basic_1"),{1234,80});
 	//system("ls ../../.. -al");
 //	system("cd ../../../../../..");
-	system("ls");
-	system("pwd");
+//	system("ls");
+//	system("pwd");
+	ui->tabWidget->addTab(new run_server_view,tr("Run Server"));
 
 }
 
@@ -25,4 +26,9 @@ MainWindow::~MainWindow()
 void MainWindow::on_lnchCDN_clicked()
 {
 	ui->tabWidget->addTab(new CDNview,tr("CDN"));
+}
+
+void MainWindow::on_lnchRunSrv_clicked()
+{
+	ui->tabWidget->addTab(new run_server_view,tr("Run Server"));
 }
