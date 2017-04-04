@@ -53,6 +53,12 @@ void DedicatedRunServer::handleRequest(QHttpRequest *req, QHttpResponse *resp)
 		string form_data = req->body().toStdString();
 		auto &&fields = parsePOST(form_data);
 
+		qDebug()<<form_data.data()<<"\n|||";
+		for(auto &t:fields)
+		{
+			qDebug()<<t.first.data()<<":" << t.second.data();
+		}
+
 		Solution sol(fields["source"], fields["type"]);
 		Run run(sol);
 		RunResult result = run.execute(fields["inp"], 1500);

@@ -50,17 +50,21 @@ RunResult Run::execute(string inp, int ms)
 
 void saveToFile(string filename, Solution &src)
 {
-	QFile file( filename.data() );
-	if(file.exists())
-		file.remove();
+	{
+		QFile file( filename.data() );
+		if(file.exists())
+			file.remove();
+	}
+	QFile file(filename.data());
 	if ( file.open(QIODevice::ReadWrite) )
 		file.write(src.getSource().data());
+	file.close();
 }
 
 void setCompilationError(RunResult &result, QProcess &compile)
 {
 	result.status = RunResult::STATUS::CTE;
-	result.m_err<<compile.readAllStandardError().toStdString()<<"\n"<<compile.readAllStandardOutput().toStdString();
+		result.m_err<<compile.readAllStandardError().toStdString()<<"\n"<<compile.readAllStandardOutput().toStdString();
 }
 
 void prepareGcc(Solution &src, QProcess &run_process, RunResult &result)

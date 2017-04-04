@@ -20,6 +20,11 @@
 
 <H1>Coderudite Browser-based - IDE</H1>
 
+<select id="lang" >
+	<option value="c" >C</option>
+	<option value="java" selected >Java</option>
+</select>
+
 <pre id="editor">
 
 public class Main {
@@ -34,7 +39,7 @@ public class Main {
 <script src="assets/lib/ace.js/src-min/ext-language_tools.js"></script>
 <script>
     var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/eclipse");
+    editor.setTheme("ace/theme/twilight");
     editor.session.setMode("ace/mode/java");
     editor.setOptions({
         enableBasicAutocompletion: true,
@@ -61,14 +66,26 @@ public class Main {
 
 <script>
 
+var langSel = document.getElementById("lang");
 var outBox = document.getElementById("oup");
 var statusHolder = document.getElementById("st");
 var errBox = document.getElementById("err");
+var type = 'java';
+
+langSel.onchange = function(){
+	type = langSel.value;
+	if(type === 'java'){
+		editor.session.setMode("ace/mode/java");		
+	} else {
+		editor.session.setMode("ace/mode/c_cpp");
+	}
+	console.log(type);
+};
 	
 document.getElementById("rbtn").onclick = function(){	
-	var data='source='+encodeURI(editor.getValue()) 
-			+'&'+'type='+'java'
-			+'&'+'inp' + encodeURI(document.getElementById("inpBox").value) ;
+	var data='source='+encodeURIComponent(editor.getValue()) 
+			+'&'+'type='+ type
+			+'&'+'inp=' + encodeURIComponent(document.getElementById("inpBox").value) ;
 			
 	var xhr = new XMLHttpRequest();
 	xhr.open('POST', 'http://localhost:5553', true);
